@@ -11,4 +11,4 @@ RUN mv wp-cli.phar /usr/local/bin/wp-cli
 RUN chmod +x /scripts/wp.sh
 RUN ln -s /scripts/wp.sh /usr/local/bin/wp
 
-ENTRYPOINT ["bash", "/scripts/entrypoint.sh"]
+ENTRYPOINT ["bash", "/scripts/docker-entrypoint.sh"]
