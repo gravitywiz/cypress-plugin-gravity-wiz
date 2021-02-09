@@ -8,10 +8,8 @@ done
 echo 'The database is ready'
 echo 'Installing WordPress...'
 
-wp core install --url=wordpress --title=tests --admin_user=admin --admin_password=admin --admin_email=test@test.com
-
-# The development version of Gravity Flow requires SCRIPT_DEBUG
 wp core config --dbhost=mysql --dbname=wordpress --dbuser=wordpress --dbpass=wordpress --extra-php="define( 'SCRIPT_DEBUG', true );" --force
+wp core install --url=wordpress --title=tests --admin_user=admin --admin_password=admin --admin_email=test@test.com
 
 echo "WordPress version: $(wp core version)"
 echo "Installing the --version ${GF_VERSION:-hotfix} of Gravity Forms using the CLI"
