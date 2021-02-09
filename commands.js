@@ -1,6 +1,6 @@
 const shellescape = require('shell-escape');
 const path = require('path');
-const { compare: compareVersions } = require('compare-versions');
+const compareVersions = require('tiny-version-compare');
 
 Cypress.Commands.add('login', () => {
     cy.visit('./wp-admin');
@@ -49,7 +49,7 @@ Cypress.Commands.add('getGFVersion', () => {
 
 Cypress.Commands.add('isGF25OrNewer', () => {
     return cy.getGFVersion().then((gfVersion) => {
-       return cy.wrap(compareVersions('2.5', gfVersion, '<='))
+       return cy.wrap(compareVersions('2.5-alpha', gfVersion) !== 1)
     });
 })
 
