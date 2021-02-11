@@ -24,6 +24,9 @@ module.exports = {
 
         console.info('Initializing test run for Gravity Wiz...');
 
+        console.info('Enabling SCRIPT_DEBUG...');
+        execa.sync('wp', ['config', 'set', 'WP_DEBUG', 'true', '--raw'])
+
         console.info('Installing and activating Gravity Forms CLI...');
         execa.sync('wp', ['plugin', 'install', '--activate', 'gravityformscli'])
 
