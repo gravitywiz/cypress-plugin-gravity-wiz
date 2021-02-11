@@ -1,6 +1,20 @@
-const shellescape = require('shell-escape');
 const path = require('path');
 const compareVersions = require('tiny-version-compare');
+
+/**
+ * Prepare path for WP-CLI
+ *
+ * @param  {...string} pathParts
+ */
+const preparePath = (...pathParts) => {
+    const joinedPath = path.join(...pathParts);
+
+    if (Cypress.platform === 'win32') {
+        return joinedPath.replace(/\/+/g, '\\');
+    }
+
+    return joinedPath;
+};
 
 Cypress.Commands.add('login', ({ username, password, logOut } = { username: 'admin', password: 'admin', logOut: false }) => {
     if (logOut) {
@@ -53,30 +67,39 @@ Cypress.Commands.add('importForm', (jsonPath) => {
         jsonPath += '.json';
     }
 
-    cy.exec(shellescape(['wp', 'eval-file', path.join(__dirname, './scripts/import-form.php'), jsonPath]))
+    cy.execa('wp', ['eval-file', preparePath(__dirname, 'scripts', 'import-form.php'), jsonPath])
         .its('stdout');
 })
 
+Cypress.Commands.add('execa', (command, args) => {
+    cy.task('execa', { command, args })
+})
+
+Cypress.Commands.overwrite('exec', () => {
+    // execa offers much better cross-platform compatibility
+    cy.wrap('Use the execa custom command rather than exec').should('be.false');
+})
+
 Cypress.Commands.add('bootstrap', () => {
-    cy.exec(shellescape(['wp', 'eval-file', path.join(__dirname, './scripts/bootstrap.php')]));
+    cy.execa('wp', ['eval-file', preparePath(__dirname, 'scripts', 'bootstrap.php')]);
 })
 
 Cypress.Commands.add('resetGF', () => {
-    cy.exec(shellescape(['wp', 'eval-file', path.join(__dirname, './scripts/reset-gf.php')]));
+    cy.execa('wp', ['eval-file', preparePath(__dirname, 'scripts', 'reset-gf.php')]);
 })
 
 Cypress.Commands.add('getGFVersion', () => {
-    cy.exec(shellescape(['wp', 'gf', 'version'])).its('stdout')
+    cy.execa('wp', ['gf', 'version']).its('stdout')
 })
 
 Cypress.Commands.add('isGF25OrNewer', () => {
     return cy.getGFVersion().then((gfVersion) => {
-       return cy.wrap(compareVersions('2.5-alpha', gfVersion) !== 1)
+        return cy.wrap(compareVersions('2.5-alpha', gfVersion) !== 1)
     });
 })
 
 Cypress.Commands.add('getFormID', (formTitle) => {
-    cy.exec(shellescape(['wp', 'eval-file', path.join(__dirname, './scripts/get-form-id.php'), formTitle]))
+    cy.execa('wp', ['eval-file', preparePath(__dirname, 'scripts', 'get-form-id.php'), formTitle])
         .its('stdout')
         .then((formID) => {
             cy.wrap(parseInt(formID))
@@ -88,9 +111,9 @@ Cypress.Commands.add('getFormID', (formTitle) => {
 });
 
 Cypress.Commands.add('importEntries', (path) => {
-    cy.exec(shellescape(['wp', 'gf', 'entry', 'import', path]));
+    cy.execa('wp', ['gf', 'entry', 'import', path]);
 })
 
 Cypress.Commands.add('evalPhp', (php) => {
-    cy.exec(shellescape(['wp', 'eval', php]));
+    cy.execa('wp', ['eval', php]);
 })
