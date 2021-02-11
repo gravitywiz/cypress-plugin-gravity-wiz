@@ -2,6 +2,9 @@ const { execFileSync } = require('child_process')
 
 module.exports = {
     initGravityWiz: (on, config, { activatePlugins }) => {
+        // Copy GF_KEY into Cypress env
+        config.env.gf_key = process.env.GF_KEY
+
         if (!activatePlugins) {
             activatePlugins = [];
         }
@@ -13,5 +16,7 @@ module.exports = {
 
         console.info('Activating Gravity Forms and Perks...');
         execFileSync('wp', ['plugin', 'activate', 'gravityforms', 'gravityperks', ...activatePlugins])
+
+        return config;
     }
 }
