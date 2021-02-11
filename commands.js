@@ -2,20 +2,25 @@ const shellescape = require('shell-escape');
 const path = require('path');
 const compareVersions = require('tiny-version-compare');
 
-Cypress.Commands.add('login', () => {
-    cy.visit('./wp-admin');
+Cypress.Commands.add('login', ({ username, password, logOut } = { username: 'admin', password: 'admin', logOut: false }) => {
+    if (logOut) {
+        cy.visit('/wp-login.php?action=logout', { failOnStatusCode: false });
+        cy.contains('a', 'log out').should('be.visible').click();
+    } else {
+        cy.visit('./wp-admin');
+    }
 
     cy.get('#user_login')
         .clear()
         .click()
-        .type('admin')
-        .should('have.value', 'admin');
+        .type(username)
+        .should('have.value', username);
 
     cy.get('#user_pass')
         .clear()
         .click()
-        .type('admin')
-        .should('have.value', 'admin');
+        .type(password)
+        .should('have.value', password);
 
     cy.get('form#loginform').submit()
 
