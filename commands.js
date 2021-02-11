@@ -32,7 +32,8 @@ Cypress.Commands.add('importForm', (jsonPath) => {
         jsonPath += '.json';
     }
 
-    cy.exec(shellescape(['wp', 'eval-file', path.join(__dirname, './scripts/import-form.php'), jsonPath]));
+    cy.exec(shellescape(['wp', 'eval-file', path.join(__dirname, './scripts/import-form.php'), jsonPath]))
+        .its('stdout');
 })
 
 Cypress.Commands.add('bootstrap', () => {
@@ -52,6 +53,18 @@ Cypress.Commands.add('isGF25OrNewer', () => {
        return cy.wrap(compareVersions('2.5-alpha', gfVersion) !== 1)
     });
 })
+
+Cypress.Commands.add('getFormID', (formTitle) => {
+    cy.exec(shellescape(['wp', 'eval-file', path.join(__dirname, './scripts/get-form-id.php'), formTitle]))
+        .its('stdout')
+        .then((formID) => {
+            cy.wrap(parseInt(formID))
+                // Assert form found with provided title
+                .should('be.gt', 0)
+
+            return cy.wrap(parseInt(formID));
+        })
+});
 
 Cypress.Commands.add('importEntries', (path) => {
     cy.exec(shellescape(['wp', 'gf', 'entry', 'import', path]));
