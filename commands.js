@@ -32,6 +32,18 @@ Cypress.Commands.add('login', ({ username, password, logOut } = { username: 'adm
 Cypress.Commands.add('see', (string, selector, containsSettings = { matchCase: false }) => {
     cy.contains( selector, string, containsSettings ).should('be.visible');
 })
+
+/* Inspired by Codeception */
+Cypress.Commands.add('fill', {
+    prevSubject: true,
+}, (subject, text) => {
+    cy.wrap(subject)
+        .should('be.visible')
+        .clear()
+        .type(text)
+        .should('have.value', text);
+})
+
 Cypress.Commands.add('importForm', (jsonPath) => {
     if (path.basename(jsonPath) === jsonPath) {
         jsonPath = path.join(Cypress.config('fixturesFolder'), 'forms', jsonPath);
