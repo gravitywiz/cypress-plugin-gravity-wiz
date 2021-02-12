@@ -6,8 +6,8 @@ rm -rf /wordpress/wp-content/plugins
 ln -s /plugins /wordpress/wp-content/plugins
 
 # Make sure the database is up and running.
-echo 'Waiting for the database...'
-while ! mysqladmin ping -hmysql --silent; do
+echo "Waiting for the database on host: ${WORDPRESS_DB_HOST}..."
+while ! mysqladmin ping -h${WORDPRESS_DB_HOST} --silent; do
 	echo '.'
 	sleep 1
 done
@@ -15,7 +15,7 @@ done
 echo 'The database is ready.'
 
 echo 'Configuring WordPress...'
-wp core config --dbhost=mysql --dbname=wordpress --dbuser=wordpress --dbpass=wordpress --extra-php="define( 'SCRIPT_DEBUG', true );" --force
+wp core config --dbhost=${WORDPRESS_DB_HOST} --dbname=wordpress --dbuser=${WORDPRESS_DB_USER} --dbpass=${WORDPRESS_DB_PASSWORD} --extra-php="define( 'SCRIPT_DEBUG', true );" --force
 
 echo 'Installing WordPress...'
 wp core install --url=localhost --title=tests --admin_user=admin --admin_password=admin --admin_email=test@test.com
