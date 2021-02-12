@@ -1,0 +1,36 @@
+# This Docker Compose file is for testing the Docker image. It should not be ran for actual testing locally or on CI.
+version: '3'
+
+services:
+  cypress:
+    image: gravitywiz/cypress-with-wp:apache
+#   build: .
+    working_dir: /plugins/gp-nested-forms
+#    ports:
+#      - "8080:80"
+    volumes:
+      - ../../gravityperks:/plugins/gravityperks
+      - ../:/plugins/gp-nested-forms
+    environment:
+      HOME: /tmp # Required by WP-CLI. See https://hub.docker.com/_/wordpress
+      GF_KEY: $GF_KEY
+      GF_VERSION: $GF_VERSION
+      PERK_ID: gp-nested-forms
+      CYPRESS_RECORD_KEY: $CYPRESS_RECORD_KEY
+      WORDPRESS_DB_HOST: mysql
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      CYPRESS_BASE_URL: http://localhost
+      CIRCLECI: $CIRCLECI
+      CIRCLE_WORKFLOW_ID: $CIRCLE_WORKFLOW_ID
+      CIRCLE_BUILD_NUM: $CIRCLE_BUILD_NUM
+    depends_on:
+      - mysql
+
+  mysql:
+    image: circleci/mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: wordpress
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
