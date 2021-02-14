@@ -1,0 +1,65 @@
+version: 2.1
+jobs:
+  test:
+    docker:
+      # Primary container image where all steps run.
+      - image: gravitywiz/cypress-with-wp:apache
+      - image: circleci/mysql:5.7
+        environment:
+          MYSQL_HOST: 127.0.0.1
+          MYSQL_DATABASE: wordpress
+          MYSQL_USER: wordpress
+          MYSQL_PASSWORD: wordpress
+          MYSQL_ROOT_HOST: "%"
+
+    parallelism: 2
+
+    parameters:
+      gf-version:
+        type: enum
+        enum: [ "hotfix", "beta", "auto-update" ]
+
+    # Variable interpolation does not play nicely in working_directory hence not using ${PERK_ID}
+    working_directory: /plugins/gp-nested-forms
+    steps:
+      - checkout
+      - run: git clone git@github.com:gravitywiz/gravityperks.git /plugins/gravityperks
+      - run:
+          name: Check current version of node
+          command: node -v
+      - run:
+          name: "Install Yarn"
+          command: |
+            npm install --global yarn
+      - run: yarn -v
+      - restore_cache:
+          name: Restore Yarn Package Cache
+          keys:
+            - yarn-packages-{{ checksum "yarn.lock" }}
+      - run:
+          name: Install Dependencies
+          command: yarn install --frozen-lockfile --cache-folder ~/.cache/yarn
+      - save_cache:
+          name: Save Yarn Package Cache
+          key: yarn-packages-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.cache/yarn
+      - run:
+          name: Test
+          command: |
+            bash /scripts/docker-entrypoint.sh
+          environment:
+            # Project-wide environment vars do not need to be included here. They'll already be available.
+            GF_VERSION: << parameters.gf-version >>
+            WORDPRESS_DB_HOST: 127.0.0.1
+            WORDPRESS_DB_USER: wordpress
+            WORDPRESS_DB_PASSWORD: wordpress
+            CYPRESS_BASE_URL: http://localhost
+
+workflows:
+  test:
+    jobs:
+      - test:
+          matrix:
+            parameters:
+              gf-version: [ "hotfix", "beta" ]
