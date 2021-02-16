@@ -15,7 +15,6 @@ services:
       HOME: /tmp # Required by WP-CLI. See https://hub.docker.com/_/wordpress
       GF_KEY: $GF_KEY
       GF_VERSION: $GF_VERSION
-      PERK_ID: gp-nested-forms
       CYPRESS_RECORD_KEY: $CYPRESS_RECORD_KEY
       WORDPRESS_DB_HOST: mysql
       WORDPRESS_DB_USER: wordpress
