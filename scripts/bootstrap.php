@@ -59,7 +59,7 @@ function enable_form_ajax( $args ) {
 }
 
 // Add legacy filter to enable legacy markup for acceptance tests
-add_filter( 'gform_enable_legacy_markup', 'legacy_check' );
+add_filter( 'gform_enable_legacy_markup', 'gwiz_legacy_check' );
 function gwiz_legacy_check( $value ) {
 	if ( rgget( 'enable_legacy' ) ) {
 		return boolval( rgget( 'enable_legacy' ) );
