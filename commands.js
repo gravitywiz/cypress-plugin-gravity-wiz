@@ -110,8 +110,8 @@ Cypress.Commands.add('getFormID', (formTitle) => {
         })
 });
 
-Cypress.Commands.add('importEntries', (path) => {
-    cy.execa('wp', ['gf', 'entry', 'import', path]);
+Cypress.Commands.add('importEntries', (formID, path) => {
+    cy.execa('wp', ['gf', 'entry', 'import', formID, path]);
 })
 
 Cypress.Commands.add('evalPhp', (php) => {
