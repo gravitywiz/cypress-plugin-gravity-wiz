@@ -110,8 +110,16 @@ Cypress.Commands.add('getFormID', (formTitle) => {
         })
 });
 
-Cypress.Commands.add('importEntries', (formID, path) => {
-    cy.execa('wp', ['gf', 'entry', 'import', formID, path]);
+Cypress.Commands.add('importEntries', (formID, jsonPath) => {
+    if (path.basename(jsonPath) === jsonPath) {
+        jsonPath = path.join(Cypress.config('fixturesFolder'), 'entries', jsonPath);
+    }
+
+    if (path.extname(jsonPath) === '') {
+        jsonPath += '.json';
+    }
+
+    cy.execa('wp', ['gf', 'entry', 'import', formID, jsonPath]);
 })
 
 Cypress.Commands.add('evalPhp', (php) => {
