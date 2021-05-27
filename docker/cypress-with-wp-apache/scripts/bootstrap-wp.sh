@@ -25,10 +25,18 @@ echo "WordPress version: $(wp core version)"
 echo "Installing Gravity Forms CLI..."
 wp plugin install gravityformscli --force --activate
 
-echo "Installing the --version ${GF_VERSION:-hotfix} of Gravity Forms"
-wp gf install --key=${GF_KEY} --version=${GF_VERSION:-hotfix} --activate --force --quiet
+if [ -d "/wordpress/wp-content/plugins/gravityforms" ]
+then
+    wp plugin activate gravityforms
+    echo "Gravity Forms activated."
+else
+    echo "Installing the --version ${GF_VERSION:-hotfix} of Gravity Forms"
+    wp gf install --key=${GF_KEY} --version=${GF_VERSION:-hotfix} --activate --force --quiet
 
-echo "Gravity Forms installation complete."
+    echo "Gravity Forms installation complete."
 
-echo "Verifying Gravity Forms checksums..."
-wp gf tool verify-checksums
+    echo "Verifying Gravity Forms checksums..."
+    wp gf tool verify-checksums
+fi
+
+
