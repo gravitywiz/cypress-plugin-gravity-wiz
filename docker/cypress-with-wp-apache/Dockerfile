@@ -1,4 +1,4 @@
-FROM cypress/included:6.4.0
+FROM cypress/included:7.4.0
 RUN apt-get update && apt-get install -y --no-install-recommends \
     mariadb-client \
     apache2 \
