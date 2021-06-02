@@ -5,6 +5,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     sudo \
     php \
     php-mysqli \
+    php-dom \
     ca-certificates \
     libapache2-mod-php \
     php-gd \
