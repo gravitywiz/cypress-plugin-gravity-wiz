@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "lib": [
+      "es2020", "ESNext.String"
+    ],
+    "target": "es2015"
+  }
+}
