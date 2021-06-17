@@ -125,3 +125,34 @@ Cypress.Commands.add('importEntries', (formID, jsonPath) => {
 Cypress.Commands.add('evalPhp', (php) => {
     cy.execa('wp', ['eval', php]);
 })
+
+/**
+ * Custom commands for serializing elements into an array of objects containing the element values and labels and then
+ * comparing them against another selector.
+ *
+ * This is useful for comparing the order of inputs/options in fields.
+ */
+const toValuesAndLabels = (elements) => {
+    return elements.map(function (index, element) {
+        const { $ } = Cypress;
+
+        return {
+            value: $(element).val(),
+            label: $(element).text()
+        }
+    }).get();
+};
+
+Cypress.Commands.add('toValuesAndLabels', { prevSubject: true }, (subject) => {
+    return cy.wrap(toValuesAndLabels(subject));
+});
+
+Cypress.Commands.add('matchesOtherInputs', { prevSubject: true }, (subject, otherSelector) => {
+    return cy.wrap(subject).toValuesAndLabels()
+        .should('deep.equal', toValuesAndLabels(Cypress.$(otherSelector)));
+});
+
+Cypress.Commands.add('doesNotMatchOtherInputs', { prevSubject: true }, (subject, otherSelector) => {
+    return cy.wrap(subject).toValuesAndLabels()
+        .should('not.deep.equal', toValuesAndLabels(Cypress.$(otherSelector)));
+});
