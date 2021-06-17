@@ -113,17 +113,19 @@ export default class Converter {
             [match('selectOption', 2), `cy.get('$1').select('$2')`],
             [/\$I->selectOption\(\s*['"](.*?)['"]\s*,\s*array\((.*?)\)\);/g, `cy.get('$1').select([$2])`],
             [match('seeOptionIsSelected', 2), `cy.get('$1').contains('option', '$2').should('be.selected')`],
-            [match('seeCheckboxIsChecked', 2), `cy.get('$1').should('be.checked')`],
-            [match('dontSeeCheckboxIsChecked', 2), `cy.get('$1').should('not.be.checked')`],
+            [match('seeCheckboxIsChecked'), `cy.get('$1').should('be.checked')`],
+            [match('dontSeeCheckboxIsChecked'), `cy.get('$1').should('not.be.checked')`],
             [match('waitForElement'), `cy.get('$1').should('exist')`],
             [match('seeElementInDOM'), `cy.get('$1').should('exist')`],
             [match('seeElement'), `cy.get('$1').should('be.visible')`],
+            [match('dontSeeElement'), `cy.get('$1').should('not.be.visible')`],
             [match('waitForElementVisible'), `cy.get('$1').should('be.visible')`],
             [match('waitForElementNotVisible'), `cy.get('$1').should('not.be.visible')`],
             [match('waitForElementClickable'), `cy.get('$1').should('be.visible')`],
             [match('clickFormButton'), `cy.get('$1').click()`],
             [match('click'), `cy.get('$1').click()`],
             [match('checkOption'), `cy.get('$1').check()`],
+            [match('seeGPPAInputIsDoneLoading'), `cy.seeGPPAInputIsDoneLoading('$1')`],
             [match('seeNumberOfElements', 2), `cy.get('$1').should('have.length', $2)`],
             [/\$I->pressKey\(\s*['"](.*?)['"]\s*,\s*\\Facebook\\WebDriver\\WebDriverKeys::TAB\s*\);/g, `// https://docs.cypress.io/api/commands/type#Typing-tab-key-does-not-work\ncy.get('$1').focus().blur()`]
         ];
@@ -168,12 +170,16 @@ export default class Converter {
             const codeceptFormsPath = path.resolve(path.dirname(this.filePath), '../_data', 'forms');
             const codeceptFormPath = path.join(codeceptFormsPath, exportFilename);
 
-            console.debug(`Copying form export ${exportFilename}...`);
+            try {
+                console.debug(`Copying form export ${codeceptFormPath}...`);
 
-            fs.copyFileSync(codeceptFormPath, path.join(process.cwd(), 'cypress', 'fixtures', 'forms', exportFilename));
+                fs.copyFileSync(codeceptFormPath, path.join(process.cwd(), 'cypress', 'fixtures', 'forms', exportFilename));
 
-            console.debug(`Removing Codecept form export ${codeceptFormPath}...`);
-            fs.unlinkSync(codeceptFormPath);
+                console.debug(`Removing Codecept form export ${codeceptFormPath}...`);
+                fs.unlinkSync(codeceptFormPath);
+            } catch (e) {
+                console.error('Could not find form export', exportFilename);
+            }
         }
     }
 
