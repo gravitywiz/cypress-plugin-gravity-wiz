@@ -10,5 +10,8 @@
   },
   "bin": {
     "codecept-to-cypress": "./index.ts"
+  },
+  "engines": {
+    "node": ">=14.0.0"
   }
 }
