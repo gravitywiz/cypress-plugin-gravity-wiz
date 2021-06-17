@@ -44,7 +44,7 @@ export default class Converter {
             this.purpose = headerCommentMatch;
 
             this.codeceptionTestContents = this.codeceptionTestContents
-                .replace(/\/\*.*Purpose:.*\*\//s, '');
+                .replace(/\/\*.*?Purpose:.*?\*\//s, '');
         } else {
             this.purpose = wantToMatch;
 
@@ -111,6 +111,7 @@ export default class Converter {
             [match('seeInField', 2), `cy.get('$1').should('have.value', '$2')`],
             [match('fillField', 2), `cy.get('$1').fill('$2')`],
             [match('selectOption', 2), `cy.get('$1').select('$2')`],
+            [/\$I->selectOption\(\s*['"](.*?)['"]\s*,\s*array\((.*?)\)\);/g, `cy.get('$1').select([$2])`],
             [match('seeOptionIsSelected', 2), `cy.get('$1').contains('option', '$2').should('be.selected')`],
             [match('seeCheckboxIsChecked', 2), `cy.get('$1').should('be.checked')`],
             [match('dontSeeCheckboxIsChecked', 2), `cy.get('$1').should('not.be.checked')`],
@@ -118,8 +119,11 @@ export default class Converter {
             [match('seeElementInDOM'), `cy.get('$1').should('exist')`],
             [match('seeElement'), `cy.get('$1').should('be.visible')`],
             [match('waitForElementVisible'), `cy.get('$1').should('be.visible')`],
+            [match('waitForElementNotVisible'), `cy.get('$1').should('not.be.visible')`],
+            [match('waitForElementClickable'), `cy.get('$1').should('be.visible')`],
             [match('clickFormButton'), `cy.get('$1').click()`],
             [match('click'), `cy.get('$1').click()`],
+            [match('checkOption'), `cy.get('$1').check()`],
             [match('seeNumberOfElements', 2), `cy.get('$1').should('have.length', $2)`],
             [/\$I->pressKey\(\s*['"](.*?)['"]\s*,\s*\\Facebook\\WebDriver\\WebDriverKeys::TAB\s*\);/g, `// https://docs.cypress.io/api/commands/type#Typing-tab-key-does-not-work\ncy.get('$1').focus().blur()`]
         ];
