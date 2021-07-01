@@ -30,8 +30,11 @@ module.exports = {
         console.info('Installing and activating Gravity Forms CLI...');
         execa.sync('wp', ['plugin', 'install', '--activate', 'gravityformscli'])
 
-        console.info('Activating Gravity Forms and Perks...');
-        execa.sync('wp', ['plugin', 'activate', 'gravityforms', 'gravityperks', ...activatePlugins])
+        console.info('Activating Gravity Forms and Gravity Perks...');
+        execa.sync('wp', ['plugin', 'activate', 'gravityforms', 'gravityperks'])
+
+        console.info('Activating the following plugins:', activatePlugins);
+        execa.sync('wp', ['plugin', 'activate', ...activatePlugins])
 
         return config;
     }

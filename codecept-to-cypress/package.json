@@ -12,6 +12,6 @@
     "codecept-to-cypress": "./index.ts"
   },
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=15.0.0"
   }
 }
