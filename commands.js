@@ -132,19 +132,27 @@ Cypress.Commands.add('evalPhp', (php) => {
  *
  * This is useful for comparing the order of inputs/options in fields.
  */
-const toValuesAndLabels = (elements) => {
+const toValuesAndLabels = (elements, trim) => {
     return elements.map(function (index, element) {
         const { $ } = Cypress;
 
+        let value = $(element).val();
+        let label = $(element).text();
+
+        if (trim) {
+            value = value.trim();
+            label = label.trim();
+        }
+
         return {
-            value: $(element).val(),
-            label: $(element).text()
+            value,
+            label,
         }
     }).get();
 };
 
-Cypress.Commands.add('toValuesAndLabels', { prevSubject: true }, (subject) => {
-    return cy.wrap(toValuesAndLabels(subject));
+Cypress.Commands.add('toValuesAndLabels', { prevSubject: true }, (subject, trim) => {
+    return cy.wrap(toValuesAndLabels(subject, trim));
 });
 
 Cypress.Commands.add('matchesOtherInputs', { prevSubject: true }, (subject, otherSelector) => {
