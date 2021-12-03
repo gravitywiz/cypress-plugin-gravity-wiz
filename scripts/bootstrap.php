@@ -46,7 +46,7 @@ function add_form_ajax_mu_plugin() {
 	$contents = <<<'FILE'
 <?php
 /**
- * Plugin Name: Gravity Wiz - AJAX Query Param
+ * Plugin Name: Gravity Wiz - Cypress Test Helpers
  * Description: This plugin is automatically added whenever Gravity Wiz acceptance tests are ran to add behavior that is needed.
  */
 add_filter( 'gform_form_args', 'enable_form_ajax' );
@@ -58,7 +58,9 @@ function enable_form_ajax( $args ) {
 	return $args;
 }
 
-// Add legacy filter to enable legacy markup for acceptance tests
+/**
+ * Add legacy filter to enable legacy markup for acceptance tests
+ */
 add_filter( 'gform_enable_legacy_markup', 'gwiz_legacy_check' );
 function gwiz_legacy_check( $value ) {
 	if ( rgget( 'enable_legacy' ) ) {
@@ -66,6 +68,27 @@ function gwiz_legacy_check( $value ) {
 	}
 
 	return $value;
+}
+
+/**
+ * Output what wp_mail() is sending to a flat file rather than actually emailing it so assertions can be made on what
+ * is email adn when.
+ */
+if ( get_option( 'gwiz_cypress_mail_output_path' ) ) {
+	function wp_mail( $to, $subject, $message, $headers = '', $attachments = array() ) {
+		$path     = get_option( 'gwiz_cypress_mail_output_path' );
+		$filename = sanitize_file_name( mktime() . '-' . $subject ) . '.json';
+
+		try {
+			$email = fopen( $path . '/' . $filename, "w" );
+			fwrite( $email, json_encode( func_get_args() ) );
+			fclose( $email );
+
+			return true;
+		} catch ( Exception $e ) {
+			wp_die( $e );
+		}
+	}
 }
 FILE;
 
