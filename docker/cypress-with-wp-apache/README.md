@@ -1,7 +1,7 @@
 ## Build
 
 ```bash
-docker build --squash . -t gravitywiz/cypress-with-wp:apache
+docker build --platform linux/amd64 --squash . -t gravitywiz/cypress-with-wp:apache
 ```
 
 ## Pushing to Docker Hub
