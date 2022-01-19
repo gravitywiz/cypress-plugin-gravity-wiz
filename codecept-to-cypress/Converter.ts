@@ -107,6 +107,7 @@ export default class Converter {
             [match('importForm'), `cy.importForm('$1')`],
             [match('loginAsAdmin', 0), `cy.login()`],
             [match('see'), `cy.see('$1')`],
+            [match('waitForText'), `cy.see('$1')`],
             [match('amOnPage'), `cy.visit('$1')`],
             [match('seeInField', 2), `cy.get('$1').should('have.value', '$2')`],
             [match('fillField', 2), `cy.get('$1').fill('$2')`],
