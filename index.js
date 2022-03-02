@@ -1,4 +1,5 @@
 const execa = require('execa')
+const { initPlugin: initSnapshots } = require('cypress-plugin-snapshots/plugin');
 
 module.exports = {
     initGravityWiz: (on, config, { activatePlugins }) => {
@@ -35,6 +36,8 @@ module.exports = {
 
         console.info('Activating the following plugins:', activatePlugins);
         execa.sync('wp', ['plugin', 'activate', ...activatePlugins])
+
+        initSnapshots(on, config);
 
         return config;
     }

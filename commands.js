@@ -1,6 +1,8 @@
 const path = require('path');
 const compareVersions = require('tiny-version-compare');
 
+import 'cypress-plugin-snapshots/commands';
+
 /**
  * Prepare path for WP-CLI
  *
