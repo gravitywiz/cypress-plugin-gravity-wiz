@@ -21,6 +21,7 @@ function gwiz_reset_gravity_forms() {
 	delete_option('gravityformsaddon_feed-base_version'); // Without this, the addon feeds table wouldn't always be created
 	gf_upgrade()->upgrade( null, true );
 	update_option( 'gform_pending_installation', false );
+	delete_transient( 'gf_updated' );
 }
 
 gwiz_reset_gravity_forms();
