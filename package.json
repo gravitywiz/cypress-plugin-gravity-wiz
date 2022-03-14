@@ -1,6 +1,6 @@
 {
   "name": "@gravitywiz/cypress-plugin-gravity-wiz",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "main": "index.js",
   "license": "MIT",
   "peerDependencies": {
