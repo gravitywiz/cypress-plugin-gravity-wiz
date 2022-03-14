@@ -166,3 +166,18 @@ Cypress.Commands.add('doesNotMatchOtherInputs', { prevSubject: true }, (subject,
     return cy.wrap(subject).toValuesAndLabels()
         .should('not.deep.equal', toValuesAndLabels(Cypress.$(otherSelector)));
 });
+
+Cypress.Commands.add('goToChoicesSettings', () => {
+    cy.getGFVersion().then((gfVersion) => {
+        if (compareVersions('2.5-alpha', gfVersion) !== 1) {
+            cy.get('#general_tab_toggle').scrollIntoView().click()
+
+            if (compareVersions('2.6-alpha', gfVersion) !== 1) {
+                cy.get('button.choices-ui__trigger').click()
+                cy.get('.gform-flyout__title').should('be.visible')
+            }
+        } else {
+            cy.get('[href="#gform_tab_1"]').scrollIntoView().click()
+        }
+    });
+})

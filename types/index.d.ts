@@ -144,5 +144,9 @@ declare namespace Cypress {
          */
         doesNotMatchOtherInputs: () => Chainable<boolean>
 
+        /**
+         * Navigates to the Choices settings for the current field.
+         */
+        goToChoicesSettings: () => Chainable<Subject>
     }
 }
