@@ -3,7 +3,7 @@ version: '3'
 
 services:
   cypress:
-    image: gravitywiz/cypress-with-wp:apache
+    image: gravitywiz/cypress-with-wp:10.2.0
 #   build: .
     working_dir: /plugins/gp-nested-forms
 #    ports:
