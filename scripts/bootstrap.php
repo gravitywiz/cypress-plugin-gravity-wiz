@@ -77,7 +77,7 @@ function gwiz_legacy_check( $value ) {
 if ( get_option( 'gwiz_cypress_mail_output_path' ) ) {
 	function wp_mail( $to, $subject, $message, $headers = '', $attachments = array() ) {
 		$path     = get_option( 'gwiz_cypress_mail_output_path' );
-		$filename = sanitize_file_name( mktime() . '-' . $subject ) . '.json';
+		$filename = sanitize_file_name( uniqid() . '-' . $subject ) . '.json';
 
 		try {
 			$email = fopen( $path . '/' . $filename, "w" );
