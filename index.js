@@ -1,5 +1,8 @@
 const execa = require('execa')
 const { initPlugin: initSnapshots } = require('cypress-plugin-snapshots/plugin');
+const path = require('path');
+const fs = require('fs');
+const os = require('os');
 
 module.exports = {
     initGravityWiz: (on, config, { activatePlugins }) => {
@@ -9,6 +12,8 @@ module.exports = {
         if (!activatePlugins) {
             activatePlugins = [];
         }
+
+        config.emailsFolder = path.resolve( os.tmpdir(), './gwiz-cypress-emails' );
 
         on('task', {
             /**
@@ -20,7 +25,46 @@ module.exports = {
              */
             execa({ command, args }) {
                 return execa.sync(command, args);
-            }
+            },
+            addPlugin( { filename, contents } ) {
+                const filePath = path.resolve( __dirname, '../', filename );
+
+                fs.writeFileSync( filePath, contents );
+                fs.chmodSync( filePath, 0o0755 );
+
+                return null;
+            },
+            clearEmails() {
+                if ( ! fs.existsSync( config.emailsFolder ) ) {
+                    fs.mkdirSync( config.emailsFolder );
+                }
+
+                // Clear out emails
+                const files = fs.readdirSync( config.emailsFolder );
+
+                for ( const file of files ) {
+                    fs.unlinkSync( path.join( config.emailsFolder, file ) );
+                }
+
+                fs.chmodSync( config.emailsFolder, 0o777 );
+
+                return null;
+            },
+
+            listEmails() {
+                return fs.readdirSync( config.emailsFolder )
+                         .filter( ( name ) => name.indexOf( '.json' ) !== -1 )
+                         .map( ( fileName ) => ( {
+                             name: fileName,
+                             time: fs.statSync( `${ config.emailsFolder }/${ fileName }` ).mtime.getTime(),
+                         } ) )
+                         .sort( ( a, b ) => a.time - b.time )
+                         .map( ( file ) => file.name );
+            },
+
+            readEmail( emailFilename ) {
+                return JSON.parse( fs.readFileSync( path.join( config.emailsFolder, emailFilename ) ).toString() );
+            },
         })
 
         console.info('Initializing test run for Gravity Wiz...');
