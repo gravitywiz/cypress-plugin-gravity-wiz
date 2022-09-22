@@ -79,7 +79,7 @@ module.exports = {
             console.info('Activating the following plugins:', activatePlugins);
             execa.sync('wp', ['plugin', 'activate', ...activatePlugins])
         } else {
-            console.info('No plugins passed to opts.activatePlugins when calling initGravityWiz(on, config, opts). Do you need to activate the plugin that you are testing?')
+            throw new Error('No plugin names passed to opts.activatePlugins when calling initGravityWiz(on, config, opts). Do you need to activate the plugin that you are testing?');
         }
 
         initSnapshots(on, config);
