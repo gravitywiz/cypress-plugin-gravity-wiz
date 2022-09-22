@@ -5,7 +5,7 @@ const fs = require('fs');
 const os = require('os');
 
 module.exports = {
-    initGravityWiz: (on, config, { activatePlugins }) => {
+    initGravityWiz: (on, config, { activatePlugins } = {}) => {
         // Copy GF_KEY into Cypress env
         config.env.gf_key = process.env.GF_KEY
 
