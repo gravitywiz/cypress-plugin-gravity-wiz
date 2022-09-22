@@ -9,10 +9,6 @@ module.exports = {
         // Copy GF_KEY into Cypress env
         config.env.gf_key = process.env.GF_KEY
 
-        if (!activatePlugins) {
-            activatePlugins = [];
-        }
-
         config.emailsFolder = path.resolve( os.tmpdir(), './gwiz-cypress-emails' );
 
         on('task', {
@@ -78,8 +74,10 @@ module.exports = {
         console.info('Activating Gravity Forms and Gravity Perks...');
         execa.sync('wp', ['plugin', 'activate', 'gravityforms', 'gravityperks'])
 
-        console.info('Activating the following plugins:', activatePlugins);
-        execa.sync('wp', ['plugin', 'activate', ...activatePlugins])
+        if (activatePlugins && activatePlugins.length) {
+            console.info('Activating the following plugins:', activatePlugins);
+            execa.sync('wp', ['plugin', 'activate', ...activatePlugins])
+        }
 
         initSnapshots(on, config);
 
