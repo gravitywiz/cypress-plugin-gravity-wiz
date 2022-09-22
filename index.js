@@ -5,7 +5,8 @@ const fs = require('fs');
 const os = require('os');
 
 module.exports = {
-    initGravityWiz: (on, config, { activatePlugins } = {}) => {
+    initGravityWiz: (on, config, opts = {}) => {
+        const { activatePlugins } = opts
         // Copy GF_KEY into Cypress env
         config.env.gf_key = process.env.GF_KEY
 
@@ -77,6 +78,8 @@ module.exports = {
         if (activatePlugins && activatePlugins.length) {
             console.info('Activating the following plugins:', activatePlugins);
             execa.sync('wp', ['plugin', 'activate', ...activatePlugins])
+        } else {
+            console.info('No plugins passed to opts.activatePlugins when calling initGravityWiz(on, config, opts). Do you need to activate the plugin that you are testing?')
         }
 
         initSnapshots(on, config);
