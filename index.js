@@ -24,8 +24,15 @@ module.exports = {
                 return execa.sync(command, args);
             },
             addPlugin( { filename, contents } ) {
-                const filePath = path.resolve( __dirname, '../', filename );
+                let pluginPath = path.resolve( __dirname, '..' );
+                const { stdout } = execa.sync( 'wp', ['plugin', 'path'] )
 
+                if (stdout) {
+                    pluginPath = stdout.trim();
+                }
+
+                const filePath = path.resolve( pluginPath, filename );
+                
                 fs.writeFileSync( filePath, contents );
                 fs.chmodSync( filePath, 0o0755 );
 
