@@ -40,8 +40,8 @@ Cypress.Commands.add('login', ({ username, password, logOut } = { username: 'adm
 
     cy.get('form#loginform').submit()
 
-    cy.contains('Dashboard')
-    cy.contains('Howdy,')
+    cy.see('Dashboard')
+    cy.see('Howdy,')
 })
 
 /* Inspired by Codeception */
