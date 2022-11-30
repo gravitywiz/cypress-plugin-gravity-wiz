@@ -6,7 +6,7 @@ Cypress.on( 'uncaught:exception', ( err ) => {
 
     // Not sure why this error is occurring but since Cypress fails on any application-side error, we need to
     // prevent this particular error from failing the entire test.
-    const resizeObserverLoopErrRe = /^[^(ResizeObserver loop limit exceeded)]/;
+    const resizeObserverLoopErrRe = /^(ResizeObserver loop limit exceeded)/;
 
     if ( resizeObserverLoopErrRe.test( err.message ) ) {
         return false;
