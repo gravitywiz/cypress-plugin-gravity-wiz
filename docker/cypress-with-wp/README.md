@@ -1,5 +1,5 @@
 ## Build & Publish
 
 ```bash
-./build.sh "10.2.0"
+./build.sh "12.2.0"
 ```
