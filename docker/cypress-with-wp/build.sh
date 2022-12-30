@@ -2,7 +2,6 @@
 CYPRESS_VERSION=$1
 
 MAJOR=`echo $CYPRESS_VERSION | cut -d. -f1`
-#MINOR=`echo $CYPRESS_VERSION | cut -d. -f2`
 
 test -n "$CYPRESS_VERSION" || { echo "CYPRESS_VERSION not set"; exit 1; }
 
@@ -12,7 +11,9 @@ docker build \
   --squash \
   . \
   --tag "gravitywiz/cypress-with-wp:$CYPRESS_VERSION" \
-  --tag "gravitywiz/cypress-with-wp:$MAJOR"
+  --tag "gravitywiz/cypress-with-wp:$MAJOR" \
+  --tag "gravitywiz/cypress-with-wp:latest" # Remove me if building an older version
 
 docker push gravitywiz/cypress-with-wp:$CYPRESS_VERSION
 docker push gravitywiz/cypress-with-wp:$MAJOR
+docker push gravitywiz/cypress-with-wp:latest
