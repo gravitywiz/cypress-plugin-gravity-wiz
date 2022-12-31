@@ -36,4 +36,8 @@ RUN chown www-data:www-data /plugins
 RUN a2enmod rewrite
 COPY virtual-host.conf /etc/apache2/sites-available/000-default.conf
 
+RUN curl -sS https://getcomposer.org/installer -o /tmp/composer-setup.php
+RUN php /tmp/composer-setup.php --install-dir=/usr/local/bin --filename=composer
+RUN composer --version
+
 ENTRYPOINT ["bash", "/scripts/docker-entrypoint.sh"]
