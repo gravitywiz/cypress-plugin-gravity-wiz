@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "es5",
+      "dom"
+    ],
+    "types": [
+      "cypress",
+      "@gravitywiz/cypress-plugin-gravity-wiz",
+      "node",
+      "cypress-plugin-snapshots"
+    ],
+    "allowJs": true,
+    "checkJs": true
+  },
+  "include": [
+    "**/*.js",
+    "**/*.ts"
+  ]
+}
