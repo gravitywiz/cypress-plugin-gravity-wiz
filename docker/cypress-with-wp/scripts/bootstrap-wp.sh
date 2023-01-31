@@ -16,6 +16,9 @@ echo 'The database is ready.'
 
 echo 'Configuring WordPress...'
 wp core config --dbhost=${WORDPRESS_DB_HOST} --dbname=wordpress --dbuser=${WORDPRESS_DB_USER} --dbpass=${WORDPRESS_DB_PASSWORD} --extra-php="define( 'SCRIPT_DEBUG', true );" --force
+wp config set --raw WP_DEBUG true
+wp config set --raw WP_DEBUG_DISPLAY false
+wp config set --raw WP_DEBUG_LOG true
 
 echo 'Installing WordPress...'
 wp core install --url=localhost --title=tests --admin_user=admin --admin_password=admin --admin_email=test@test.com

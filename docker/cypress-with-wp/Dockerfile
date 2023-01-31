@@ -11,7 +11,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
     libapache2-mod-php \
     php-gd \
-    php-ssh2
+    php-ssh2 \
+    curl
 
 COPY ./scripts /scripts
 
