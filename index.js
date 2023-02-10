@@ -69,6 +69,31 @@ module.exports = {
             readEmail( emailFilename ) {
                 return JSON.parse( fs.readFileSync( path.join( config.emailsFolder, emailFilename ) ).toString() );
             },
+
+            async clearDebugLog() {
+                const { stdout: logPath } = await execa( 'wp', [
+                    'eval',
+                    `echo WP_CONTENT_DIR . '/debug.log';`,
+                ] );
+
+                if ( fs.existsSync( logPath ) ) {
+                    fs.rmSync( logPath );
+                }
+
+                return null;
+            },
+            async getDebugLog() {
+                const { stdout: logPath } = await execa( 'wp', [
+                    'eval',
+                    `echo WP_CONTENT_DIR . '/debug.log';`,
+                ] );
+
+                if ( ! fs.existsSync( logPath ) ) {
+                    return '';
+                }
+
+                return fs.readFileSync( logPath ).toString();
+            },
         })
 
         console.info('Initializing test run for Gravity Wiz...');

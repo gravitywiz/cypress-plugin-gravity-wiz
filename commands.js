@@ -181,3 +181,29 @@ Cypress.Commands.add('goToChoicesSettings', () => {
         }
     });
 })
+
+Cypress.Commands.add( 'clearDebugLog', () => {
+    cy.task( 'clearDebugLog' );
+} );
+
+Cypress.Commands.add( 'checkDebugLog', () => {
+    cy.task( 'getDebugLog' ).then( ( log ) => {
+        // Fail if there are warnings or fatal errors
+        const regex = /\[\d+-\S+-\d{4} \d{2}:\d{2}:\d{2} UTC] (PHP Fatal error|PHP Warning): ([\s\S]+?)\[\d+-\S+-\d{4} \d{2}:\d{2}:\d{2} UTC]/g;
+        let m;
+        const errors = [];
+
+        while ( ( m = regex.exec( log ) ) !== null ) {
+            // This is necessary to avoid infinite loops with zero-width matches
+            if ( m.index === regex.lastIndex ) {
+                regex.lastIndex++;
+            }
+
+            errors.push( m[ 1 ] + ': ' + m[ 2 ] );
+        }
+
+        if ( errors.length ) {
+            throw new Error( errors.join( '\n\n' ) );
+        }
+    } );
+} );
