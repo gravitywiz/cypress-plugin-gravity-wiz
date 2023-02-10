@@ -12,7 +12,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libapache2-mod-php \
     php-gd \
     php-ssh2 \
-    curl
+    curl \
+    openssh-client
 
 COPY ./scripts /scripts
 
