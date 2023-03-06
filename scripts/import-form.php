@@ -1,5 +1,5 @@
 <?php
-function gwiz_import_form( $export_path ) {
+function gwiz_import_form( $export_path, $form_title = null ) {
 	require_once( \GFCommon::get_base_path() . '/export.php' );
 
 	$filename  = basename( $export_path, '.json' );
@@ -19,6 +19,15 @@ function gwiz_import_form( $export_path ) {
 	 * happen when importing through the UI.
 	 */
 	add_filter( 'gform_disable_form_settings_sanitization', '__return_true', 100 );
+
+	if ( ! empty( $form_title ) ) {
+		add_action( 'gform_forms_post_import', function( $forms ) use ($form_title) {
+			foreach ( $forms as $form ) {
+				$form['title'] = $form_title;
+				\GFAPI::update_form( $form );
+			}
+		} );
+	}
 
 	\GFExport::import_file( $json_path );
 
@@ -51,4 +60,4 @@ function gwiz_import_form( $export_path ) {
 }
 
 /** @var array $args Arg provided by WP-CLI */
-echo json_encode( gwiz_import_form( $args[0] ) );
+echo json_encode( gwiz_import_form( $args[0], $args[1] ) );
