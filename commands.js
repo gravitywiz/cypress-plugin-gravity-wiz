@@ -44,6 +44,11 @@ Cypress.Commands.add('login', ({ username, password, logOut } = { username: 'adm
     cy.see('Howdy,')
 })
 
+Cypress.Commands.add('logout', () => {
+    cy.visit('/wp-login.php?action=logout', { failOnStatusCode: false });
+    cy.contains('a', 'log out').should('be.visible').click();
+});
+
 /* Inspired by Codeception */
 Cypress.Commands.add('see', (string, selector, containsSettings = { matchCase: false }) => {
     cy.contains( selector, string, containsSettings ).should('be.visible');
