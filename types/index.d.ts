@@ -6,6 +6,11 @@ declare namespace Cypress {
         login: (args?: { username: 'string', password: string, logOut?: boolean }) => Chainable<Subject>
 
         /**
+         * Logs the current user out of WordPress.
+         */
+        logout: () => Chainable<Subject>
+
+        /**
         * Command inspired by Codeception to check if a string is visible on the current page.
         * 
         * @param {string} string The string/text to check for on the page.
