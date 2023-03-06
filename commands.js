@@ -60,7 +60,7 @@ Cypress.Commands.add('fill', {
         .should('have.value', text);
 })
 
-Cypress.Commands.add('importForm', (jsonPath) => {
+Cypress.Commands.add('importForm', (jsonPath, formTitle) => {
     if (path.basename(jsonPath) === jsonPath) {
         jsonPath = path.join(Cypress.config('fixturesFolder'), 'forms', jsonPath);
     }
@@ -69,7 +69,13 @@ Cypress.Commands.add('importForm', (jsonPath) => {
         jsonPath += '.json';
     }
 
-    cy.execa('wp', ['eval-file', preparePath(__dirname, 'scripts', 'import-form.php'), jsonPath])
+    const args = ['eval-file', preparePath(__dirname, 'scripts', 'import-form.php'), jsonPath];
+
+    if (formTitle) {
+        args.push(formTitle);
+    }
+
+    cy.execa('wp', args)
         .its('stdout');
 })
 

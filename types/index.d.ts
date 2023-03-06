@@ -34,7 +34,7 @@ declare namespace Cypress {
         *    cy.importForm('kitchen-sink')
         *    cy.visit('/kitchen-sink')
         */
-        importForm: (filename: string) => Chainable<Subject>
+        importForm: (filename: string, formTitle?: string) => Chainable<Subject>
 
         /**
          * Executes the command using `execa`. Useful for running WP-CLI commands.
