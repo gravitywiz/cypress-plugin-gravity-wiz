@@ -7,6 +7,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     sudo \
     php \
     php-mysqli \
+    php-curl \
+    php-zip \
     php-dom \
     ca-certificates \
     libapache2-mod-php \
