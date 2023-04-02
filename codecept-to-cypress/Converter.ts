@@ -154,8 +154,8 @@ export default class Converter {
 
     createCypressSpec() {
         const ceptFilename = path.basename(this.filePath, '.php');
-        const specFilename = snakeCase(ceptFilename.replace(/Cept$/, '')) + '.spec.js';
-        const specPath = path.join(process.cwd(), 'cypress', 'integration', specFilename);
+        const specFilename = snakeCase(ceptFilename.replace(/Cept$/, '')) + '.cy.ts';
+        const specPath = path.join(process.cwd(), 'cypress', 'e2e', specFilename);
 
         console.debug(`Writing Cypress spec to ${specPath}...`);
 
