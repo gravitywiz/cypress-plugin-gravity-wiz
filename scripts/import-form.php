@@ -60,4 +60,5 @@ function gwiz_import_form( $export_path, $form_title = null ) {
 }
 
 /** @var array $args Arg provided by WP-CLI */
+$args[1] = isset( $args[1] ) ? $args[1] : null;
 echo json_encode( gwiz_import_form( $args[0], $args[1] ) );
