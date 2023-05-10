@@ -3,7 +3,7 @@ declare namespace Cypress {
         /**
         * Logs into WordPress using the login form.
         */
-        login: (args?: { username: 'string', password: string, logOut?: boolean }) => Chainable<Subject>
+        login: (args?: { username: string, password: string, logOut?: boolean }) => Chainable<Subject>
 
         /**
          * Logs the current user out of WordPress.
