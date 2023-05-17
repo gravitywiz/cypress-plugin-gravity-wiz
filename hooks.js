@@ -28,5 +28,12 @@ after( () => {
     cy.get( '.xdebug-error' ).should( 'not.exist' );
     cy.contains( 'WordPress database error' ).should( 'not.exist' );
 
-    cy.checkDebugLog();
+    // Only check debug log for GF 2.5 or newer
+    cy.isGF25OrNewer().then((isGF25OrNewer) => {
+        if (!isGF25OrNewer) {
+            return;
+        }
+
+        cy.checkDebugLog();
+    });
 } );
