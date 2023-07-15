@@ -1,21 +1,34 @@
 ARG CYPRESS_VERSION
 FROM cypress/included:$CYPRESS_VERSION
 
+# Add packages for Sury
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    lsb-release \
+    ca-certificates \
+    apt-transport-https \
+    software-properties-common \
+    curl \
+    openssh-client \
+    gnupg2
+
+# Add PPA
+RUN echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/sury-php.list
+RUN curl -fsSL  https://packages.sury.org/php/apt.gpg| gpg --dearmor -o /etc/apt/trusted.gpg.d/sury-keyring.gpg
+
+# Install what we need
 RUN apt-get update && apt-get install -y --no-install-recommends \
     mariadb-client \
     apache2 \
     sudo \
-    php \
-    php-mysqli \
-    php-curl \
-    php-zip \
-    php-dom \
+    php8.1 \
+    php8.1-mysqli \
+    php8.1-curl \
+    php8.1-zip \
+    php8.1-dom \
     ca-certificates \
     libapache2-mod-php \
-    php-gd \
-    php-ssh2 \
-    curl \
-    openssh-client
+    php8.1-gd \
+    php8.1-ssh2 \
 
 COPY ./scripts /scripts
 
