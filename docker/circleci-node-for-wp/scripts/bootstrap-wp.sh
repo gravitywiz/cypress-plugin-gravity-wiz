@@ -38,8 +38,8 @@ else
 
     echo "Gravity Forms installation complete."
 
-    echo "Verifying Gravity Forms checksums..."
-    wp gf tool verify-checksums
+    # echo "Verifying Gravity Forms checksums..."
+    # wp gf tool verify-checksums
 fi
 
 

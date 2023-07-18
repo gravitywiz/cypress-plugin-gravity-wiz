@@ -4,4 +4,4 @@ docker build \
   . \
   --tag "gravitywiz/circleci-node-for-wp:latest"
 
-docker push gravitywiz/cypress-with-wp:latest
+docker push gravitywiz/circleci-node-for-wp:latest
