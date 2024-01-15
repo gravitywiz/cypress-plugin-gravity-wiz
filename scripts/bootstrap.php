@@ -81,12 +81,17 @@ if ( get_option( 'gwiz_cypress_mail_output_path' ) ) {
 
 		try {
 			$email = @fopen( $path . '/' . $filename, "w" );
+
+			if ( ! $email ) {
+				throw new Exception( 'Unable to open file for writing.' );
+			}
+
 			fwrite( $email, json_encode( func_get_args() ) );
 			fclose( $email );
 
 			return true;
 		} catch ( Exception $e ) {
-			return;
+			return false;
 		}
 	}
 }
