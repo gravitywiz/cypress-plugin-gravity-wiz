@@ -80,13 +80,13 @@ if ( get_option( 'gwiz_cypress_mail_output_path' ) ) {
 		$filename = sanitize_file_name( uniqid( '', true ) . '-' . $subject ) . '.json';
 
 		try {
-			$email = fopen( $path . '/' . $filename, "w" );
+			$email = @fopen( $path . '/' . $filename, "w" );
 			fwrite( $email, json_encode( func_get_args() ) );
 			fclose( $email );
 
 			return true;
 		} catch ( Exception $e ) {
-			wp_die( $e );
+			return;
 		}
 	}
 }
